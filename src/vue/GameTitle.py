@@ -10,24 +10,33 @@ from vue.ControlScene import ControlScene
 
 class GameTitle(Scene):
     """
-    Represents the title screen of the game.
-    Inherits from the Scene class.
+    Represents the title screen of the game. Inherits from the Scene class.
+
+    Attributes:
+        bg (pygame.Surface): The background image of the title screen.
+        choice (Choice): The current choice selected in the title screen.
+        options (list): The list of options available in the title screen.
+        font (pygame.font.Font): The font used to render the options.
+        buttons (list): The list of Button objects representing the options.
 
     Methods:
         __init__(screen): Initializes the GameTitle instance with the screen.
-        handle_events(): Handles events specific to the title screen.
+        setup(): Sets up the title screen.
+        __del__(): Stops the music when the title screen is deleted.
+        handle_events(event): Handles events specific to the title screen.
         update(): Updates the title screen.
         render(): Renders the title screen.
+        choice_handler(choice): Handles the choice of the player.
     """
 
     __slots__ = ["bg", "choice", "options", "font", "buttons"]
 
     def __init__(self, core) -> None:
         """
-        Initializes the GameTitle instance with the screen.
+        Initializes the GameTitle instance with the core.
 
         Parameters:
-            screen (pygame.Surface): The surface to render the title screen on.
+            core (Core): The core to render the title screen on.
         """
         super().__init__(core)
 
@@ -42,6 +51,9 @@ class GameTitle(Scene):
         self.options = ["jouer", "sauvegardes", "explications", "option", "quitter"]
 
     def setup(self) -> None:
+        """
+        Sets up the title screen. This includes loading the background image, setting the music volume, and creating the buttons.
+        """
         self.core.update_screen()
 
         pygame.mixer.music.set_volume(self.parameter["volume"])
@@ -70,11 +82,17 @@ class GameTitle(Scene):
         ]
 
     def __del__(self) -> None:
+        """
+        Stops the music when the title screen is deleted.
+        """
         pygame.mixer.music.stop()
 
     def handle_events(self, event: pygame.event.Event) -> None:
         """
-        Handles events specific to the title screen.
+        Handles events specific to the title screen. This includes handling key presses and mouse events.
+
+        Parameters:
+            event (pygame.event.Event): The event to handle.
         """
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE or event.key == pygame.K_KP_ENTER:
@@ -101,7 +119,7 @@ class GameTitle(Scene):
 
     def update(self) -> None:
         """
-        Updates the title screen.
+        Updates the title screen. This method is currently empty and can be overridden in subclasses to provide custom update logic.
         """
         pass
 
@@ -161,7 +179,10 @@ class GameTitle(Scene):
 
     def choice_handler(self, choice: Choice) -> None:
         """
-        Handles the choice of the player.
+        Handles the choice of the player. This includes handling the different options available in the title screen.
+
+        Parameters:
+            choice (Choice): The choice of the player.
         """
         if choice == 1:
             pygame.event.post(pygame.event.Event(self.event, {"scene": "game"}))
@@ -173,9 +194,7 @@ class GameTitle(Scene):
             saves_scene.run()
             self.setup()
         elif choice == 3:
-            controls_scene = ControlScene(
-                self.core, self.render
-            )
+            controls_scene = ControlScene(self.core, self.render)
             controls_scene.run()
             self.setup()
         elif choice == 4:

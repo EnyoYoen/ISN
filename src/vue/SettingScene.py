@@ -6,20 +6,44 @@ from vue.Select import Select
 from vue.Slider import Slider
 
 
-# TODO : adjust the select and slider class to the new structure
 class SettingsScene(Scene):
     """
-    Represents the settings screen of the game.
-    Inherits from the Scene class.
+        Represents the settings screen of the game.
+        Inherits from the Scene class.
 
-    Methods:
-        __init__(screen): Initializes the SettingsScene instance with the screen.
-        handle_events(): Handles events specific to the settings screen.
-        update(): Updates the settings screen.
-        render(): Renders the settings screen.
-        increase_volume(): Increases the game volume.
-        decrease_volume(): Decreases the game volume.
-        change_resolution(): Changes the game resolution.
+        Attributes:
+        ----------
+        opacity : pygame.Surface
+            A surface that covers the entire screen to create an opacity effect.
+        scale : float
+            The scale of the screen.
+        volume : float
+            The current volume of the game.
+        resolution : tuple
+            The current resolution of the game.
+        volume_slider : Slider
+            A slider to adjust the volume.
+        resolution_menu : Select
+            A menu to select the resolution.
+        apply_button : Button
+            A button to apply the settings.
+        cancel_button : Button
+            A button to cancel the settings.
+        parent_render : callable
+            A function to render the parent scene.
+
+        Methods:
+        -------
+        __init__(core, parent_render):
+            Initializes the SettingsScene instance with the core game engine and a function to render the parent scene.
+        handle_events(event):
+            Handles events specific to the settings screen.
+        update():
+            Updates the settings screen.
+        render():
+            Renders the settings screen.
+        change_button_color(button, hovered):
+            Changes the color of the button when hovered.
     """
 
     __slots__ = [
@@ -36,10 +60,14 @@ class SettingsScene(Scene):
 
     def __init__(self, core, parent_render: callable) -> None:
         """
-        Initializes the SettingsScene instance with the screen.
+            Initializes the SettingsScene instance with the core game engine and a function to render the parent scene.
 
-        Parameters:
-            core (pygame.Surface): The surface to render the settings screen on.
+            Parameters:
+            ----------
+            core : any
+                The core game engine.
+            parent_render : callable
+                A function to render the parent scene.
         """
         super().__init__(core)
         self.parent_render = parent_render
@@ -89,7 +117,13 @@ class SettingsScene(Scene):
 
     def handle_events(self, event: pygame.event.Event) -> None:
         """
-        Handles events specific to the settings screen.
+            Handles events specific to the settings screen.
+
+            This method checks if the apply button is clicked. If it is, it applies the settings by updating the volume and resolution parameters
+            based on the current values of the volume and resolution attributes of the SettingsScene instance.
+
+            Args:
+                event (pygame.event.Event): The event to handle.
         """
         if self.apply_button.is_clicked(event):
             # Apply the settings
@@ -118,7 +152,10 @@ class SettingsScene(Scene):
 
     def update(self) -> None:
         """
-        Updates the settings screen.
+            Updates the settings screen.
+            This method updates the volume based on the volume slider's value and sets the game's music volume accordingly.
+            It also updates the resolution based on the resolution menu's value.
+            If the scale is less than 0.99, it increments the scale by 0.05.
         """
         self.volume = self.volume_slider.get_value()
         pygame.mixer.music.set_volume(self.volume)
@@ -130,7 +167,10 @@ class SettingsScene(Scene):
 
     def render(self) -> None:
         """
-        Renders the settings screen.
+           Renders the settings screen.
+
+           This method first calls the parent's render method to render the parent scene.
+           Then, it overlays the settings screen on top of the parent scene.
         """
         self.parent_render()
         self.screen.blit(self.opacity, (0, 0))
@@ -171,9 +211,14 @@ class SettingsScene(Scene):
     @staticmethod
     def change_button_color(button: Button, hovered: bool) -> None:
         """
-        Changes the color of the button when hovered.
+            Changes the color of the button when hovered.
 
-        Parameters:
+            This method checks if the button is hovered. If it is, it changes the color of the button to a brighter shade.
+            If the button is not hovered, it changes the color of the button to a darker shade.
+            The color change depends on the text of the button. If the text is "Apply", the color is green. If the text is not "Apply", the color is red.
+
+            Parameters:
+            ----------
             button (Button): The button to change the color of.
             hovered (bool): Whether the button is hovered or not.
         """
