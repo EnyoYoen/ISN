@@ -34,7 +34,7 @@ class BuildingInterface:
         for human_type in HumanType:
             self.human_icon[human_type] = pygame.transform.scale(pygame.image.load(f"assets/icons/{human_type.name.lower()}.png").convert_alpha(), (30, 30))
 
-        self.background = pygame.transform.scale(pygame.image.load("assets/building.png").convert_alpha(), (self.rect.x2 - self.rect.x1, self.rect.y2 - self.rect.y1))
+        self.background = pygame.transform.scale(pygame.image.load("assets/Textures/UI/building.png").convert_alpha(), (self.rect.x2 - self.rect.x1, self.rect.y2 - self.rect.y1))
 
     def create_buttons(self, buttons_info):
         """

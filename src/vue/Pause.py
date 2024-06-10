@@ -160,7 +160,6 @@ class Pause(Scene):
             ),
         )  # Scale the screen
 
-        self.parent_render()
         self.screen.blit(
             scaled_screen,
             (

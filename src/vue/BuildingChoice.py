@@ -21,7 +21,7 @@ class BuildingChoice:
         self.building_costs = {
             BuildingType.FARM: {RessourceType.WOOD: 50},
             BuildingType.PANTRY: {RessourceType.WOOD: 75, RessourceType.STONE: 25},
-            BuildingType.MINER_CAMP: {RessourceType.WOOD: 75, RessourceType.STONE: 25},
+            BuildingType.MINER_CAMP: {RessourceType.WOOD: 75, RessourceType.STONE: 25, RessourceType.IRON: 25},
             BuildingType.LUMBER_CAMP: {RessourceType.WOOD: 100, RessourceType.STONE: 25},
             BuildingType.HUNTER_CAMP: {RessourceType.WOOD: 50, RessourceType.STONE: 25, RessourceType.FOOD: 25},
             BuildingType.SOLDIER_CAMP: {RessourceType.WOOD: 50, RessourceType.STONE: 25, RessourceType.IRON: 50},
@@ -51,7 +51,7 @@ class BuildingChoice:
         self.internal_origin = Point(34, 44) * scale_factor
         self.rect = Rectangle(0, 0, self.width, self.screen_size.y - self.ressource_rect_size.y - 20)
         self.ressource_icons = ressource_icons
-        self.background = pygame.transform.scale(pygame.image.load("assets/building_ui.png").convert_alpha(), (self.rect.x2, self.rect.y2))
+        self.background = pygame.transform.scale(pygame.image.load("assets/Textures/UI/building_ui.png").convert_alpha(), (self.rect.x2, self.rect.y2))
 
         self.create_buttons()
 

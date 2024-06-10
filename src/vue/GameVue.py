@@ -157,7 +157,7 @@ class GameVue(Scene):
 
         self.missing_texture = pygame.transform.scale(pygame.image.load("assets/Textures/missing.png").convert_alpha(), (Map.CELL_SIZE, Map.CELL_SIZE))
 
-        self.ressource_background = pygame.transform.scale(pygame.image.load("assets/ui.png").convert_alpha(), (312 * self.scale_factor, 202 * self.scale_factor))
+        self.ressource_background = pygame.transform.scale(pygame.image.load("assets/Textures/UI/ui.png").convert_alpha(), (312 * self.scale_factor, 202 * self.scale_factor))
         self.ressource_background_size = Point(self.ressource_background.get_width(), self.ressource_background.get_height())
         self.home_button = Button("Base", self.ressource_background_size.x + 15 * self.scale_factor, self.screen_height - 95 * self.scale_factor, 70 * self.scale_factor, 70 * self.scale_factor, (46, 159, 228), None, 15)
         self.building_button = Button("Bâtiments", self.ressource_background_size.x + 15 * self.scale_factor, self.screen_height - 180 * self.scale_factor, 70 * self.scale_factor, 70 * self.scale_factor, (46, 159, 228), None, 15)
@@ -186,7 +186,6 @@ class GameVue(Scene):
         mouse_point = Point(mouse_pos[0], mouse_pos[1])
         home_button_hovered, building_button_hovered = self.home_button_rect.containsPoint(mouse_point), self.building_button_rect.containsPoint(mouse_point)
 
-        # Events for the building choice interface 
         if self.building_choice_displayed and self.building_choice.rect.containsPoint(mouse_point):
             result = self.building_choice.event_stream(event)
             if result is not None:
@@ -320,8 +319,6 @@ class GameVue(Scene):
                         self.core, self.render, self.saver
                     )  # Create and run the settings scene
                     pause.run()
-                if event.key == pygame.K_s: # TODO: temporary
-                    self.saver.save()
                 if event.key == pygame.K_h: # TODO: For debug, remove for the final version
                     chunk_pos = self.camera_pos // Map.CELL_SIZE // Perlin.CHUNK_SIZE
                     if self.map.chunk_humans.get(chunk_pos, None) is None:

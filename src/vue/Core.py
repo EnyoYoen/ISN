@@ -50,7 +50,7 @@ class Core:
         Initializes the pygame module.
         """
         pygame.display.set_caption("Exodus", "exodus icon")
-        pygame.display.set_icon(pygame.image.load("assets/icon/exodus.png"))
+        pygame.display.set_icon(pygame.image.load("assets/Textures/UI/exodus.png"))
         # TODO : add an icon for the window in the task manager
 
     def setup_parameter(self) -> None:

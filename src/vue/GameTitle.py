@@ -47,7 +47,7 @@ class GameTitle(Scene):
         pygame.mixer.music.set_volume(self.parameter["volume"])
 
         self.bg = pygame.transform.smoothscale(
-            pygame.image.load("assets/icon/background.jpg"),
+            pygame.image.load("assets/Textures/UI/background.jpg"),
             (self.screen.get_width(), self.screen.get_height()),
         )
 
