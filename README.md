@@ -3,27 +3,23 @@ Projet ISN 2A
 
 ## Dépendances :
 
-This project depends on Pygame and some other dependencies. You can install it using pip with the following command :
+Ce projet dépend de Pygame et de quelques autres dépendances. Vous pouvez l'installer en utilisant pip avec la commande suivante :
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-## Diagramme UML :
-
-The UML diagram for this project is available in the 'UML.drawio' file. You can view and edit this file on
-the [Drawio](https://app.diagrams.net/) website.
-
-## License :
-
-This project is licensed under the terms of the MIT license.
+## Lancement du jeu :
+Dans la racine du dossier :
+```bash
+python src/main.py
+```
 
 ## Credits :
 
-- Game developed by Théo Frémont, Yoen Peyrot, Ngo hung anh, Elsa Nguyen, Paul Frayse.
-- Music: Space Ambience by Alexander Nakarada (CreatorChords) | https://creatorchords.com
-- Game engine: Pygame
+- Jeu développé par Théo Frémont, Yoen Peyrot, Ngo Hung Anh, Elsa Nguyen, Paul Fraysse.
+- Moteur de jeu : Pygame
 
-## Music credits :
+## Crédits musique :
 
 Space Ambience by Alexander Nakarada (CreatorChords) | https://creatorchords.com
 Music promoted by https://www.free-stock-music.com

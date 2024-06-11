@@ -1,0 +1,31 @@
+Yoen PEYROT : 
+    40% 
+    Tout le code dans le dossier 'model' à part 'AStar.py'.
+    Dans le dossier 'vue' : 'GameVue.py' (à part la boussole), 'BuildingChoice.py', 'BuildingInterface.py' et puis 'SavesScene.py' et 'ControlScene.py' sous le modèle de 'SettingScene.py'.
+    Traitement des images générées par IA par Théo FREMONT.
+    Forte implications dans les deux premiers rendus.
+
+Théo FREMONT :
+    35% 
+    Dans le dossier 'vue' : 'Button.py', 'Choice.py', 'Core.py', 'GameTitle.py', 'Scene.py', 'Select.py', 'SettingScene.py', 'Slider.py'.
+    'main.py'.
+    Générations des textures par IA.
+    Tentative d'implémentation d'IA qui n'a pas aboutie à temps.
+    Des scripts de tests.
+    Forte implications dans les deux premiers rendus.
+
+Elsa NGUYEN :
+    11%
+    Implémentation de la boussole et 'Pause.py' sous le modèle de 'SettingScene.py'.
+    Description de l'algorithme non trivial (Perlin).
+
+Hung NGO ANH :
+    11%
+    Implémentation de 'AStar.py'.
+    Tentative d'implémentation d'animaux qui n'a pas aboutie à temps.
+
+Paul FRAYSSE :
+    3%
+    Présence en cours.
+
+Total : 100%
