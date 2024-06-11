@@ -3,16 +3,17 @@ Yoen PEYROT :
     Tout le code dans le dossier 'model' à part 'AStar.py'.
     Dans le dossier 'vue' : 'GameVue.py' (à part la boussole), 'BuildingChoice.py', 'BuildingInterface.py' et puis 'SavesScene.py' et 'ControlScene.py' sous le modèle de 'SettingScene.py'.
     Traitement des images générées par IA par Théo FREMONT.
-    Forte implications dans les deux premiers rendus.
+    Forte implications dans le deuxième rendu.
+    Vidéo de présentation.
 
 Théo FREMONT :
     35% 
     Dans le dossier 'vue' : 'Button.py', 'Choice.py', 'Core.py', 'GameTitle.py', 'Scene.py', 'Select.py', 'SettingScene.py', 'Slider.py'.
     'main.py'.
     Générations des textures par IA.
-    Tentative d'implémentation d'IA qui n'a pas aboutie à temps.
+    Tentative d'implémentation d'IA joueur qui n'a pas aboutie à temps.
     Des scripts de tests.
-    Forte implications dans les deux premiers rendus.
+    Forte implications dans le premier rendu.
 
 Elsa NGUYEN :
     11%
