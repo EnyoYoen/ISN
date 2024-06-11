@@ -7,9 +7,50 @@ from model.Structures import BuildingType
 from model.Ressource import RessourceType
 
 class BuildingChoice:
+    """
+    Classe représentant l'interface utilisateur pour le choix des bâtiments à construire.
+
+    Attributs:
+    ----------
+    buttons : dict
+        Les boutons pour chaque type de bâtiment.
+    player : Player
+        Le joueur qui construit les bâtiments.
+    screen : pygame.Surface
+        La surface de la fenêtre du jeu.
+    screen_size : Point
+        La taille de la fenêtre du jeu.
+    ressource_rect_size : Point
+        La taille de la zone de l'interface des ressources.
+    width : int
+        La largeur de la zone de l'interface des bâtiments.
+    margin : int
+        La marge entre les buttons des bâtiments.
+    padding : int
+        La marge interne des boutons des bâtiments.
+    building_size : int
+        La taille des boutons des bâtiments.
+    internal_origin : Point
+        L'origine interne de la zone de l'interface des bâtiments (pour être dans le carré de l'interface).
+    rect : Rectangle
+        Le rectangle de la zone de l'interface des bâtiments.
+    building_costs : dict
+        Les coûts de construction des bâtiments.
+    font : pygame.font.Font
+        La police de caractères pour afficher le nom des bâtiments.
+    ressource_icons : dict
+        Les icônes des ressources.
+    building_icons : dict
+        Les icônes des bâtiments.
+    building_rendered_names : dict
+        Les noms des bâtiments pré-rendus.
+    background : pygame.Surface
+        L'image de fond de l'interface des bâtiments.
+    """
     __slots__ = ["buttons", "player", "screen", "screen_size", "ressource_rect_size", "width", "margin", "padding", "building_size", "internal_origin", "rect", "building_costs", "font", "ressource_icons", "building_icons", "building_rendered_names", "background"]
 
     def __init__(self, player, screen, screen_size, ressource_rect_size, ressource_icons, scale_factor):
+        # Les noms des bâtiments associés à leur type
         building_names =  {
             BuildingType.FARM: "Ferme", 
             BuildingType.PANTRY: "Garde-Manger",
@@ -18,6 +59,7 @@ class BuildingChoice:
             BuildingType.HUNTER_CAMP: "Camp de chasseurs",
             BuildingType.SOLDIER_CAMP: "Camp de soldats",
         }
+        # Les coûts de construction des bâtiments
         self.building_costs = {
             BuildingType.FARM: {RessourceType.WOOD: 50},
             BuildingType.PANTRY: {RessourceType.WOOD: 75, RessourceType.STONE: 25},
@@ -27,18 +69,22 @@ class BuildingChoice:
             BuildingType.SOLDIER_CAMP: {RessourceType.WOOD: 50, RessourceType.STONE: 25, RessourceType.IRON: 50},
         }
         
+        # Chargement de la police de caractères
         self.font = pygame.font.Font("assets/font/Junter.otf", 12)
 
+        # Chargement des icônes et des noms des bâtiments
         self.building_icons = {}
         self.building_rendered_names = {}
         for type, name in building_names.items():
             self.building_icons[type] = pygame.transform.scale(pygame.image.load(f"assets/icons/{type.name.lower()}.png").convert_alpha(), (50, 50))
             self.building_rendered_names[type] = self.font.render(name, True, (255, 255, 255))
             
+        # Chargement des icônes des ressources
         self.ressource_icons = {}
         for ressource_type, ressource_icon in ressource_icons.items():
             self.ressource_icons[ressource_type] = pygame.transform.scale(ressource_icon, (30, 30))
 
+        # Initialisation des paramètres de l'interface
         self.buttons = {}
         self.player = player
         self.screen = screen
@@ -56,6 +102,9 @@ class BuildingChoice:
         self.create_buttons()
 
     def create_buttons(self):
+        """
+        Crée les boutons pour chaque type de bâtiment.
+        """
         i = 0
         for building_type in self.building_costs.keys():
             button = Button("", self.margin + i % 2 * (self.building_size + self.margin * 2) + self.internal_origin.x, self.margin + (self.building_size + self.margin * 2) * (i // 2) + self.internal_origin.y, self.building_size, self.building_size, (175, 175, 175), None, 0)
@@ -64,12 +113,25 @@ class BuildingChoice:
             i += 1
 
     def display_building(self, building_type, position):
+        """
+        Affiche un bâtiment à une position donnée.
+
+        Paramètres:
+        -----------
+        building_type : BuildingType
+            Le type de bâtiment à afficher.
+        position : Point
+            La position du coin supérieur gauche du bouton du bâtiment.
+        """
+        # Affichage du bouton
         self.buttons[building_type].render(self.screen)
 
+        # Affichage du nom et de l'icône du bâtiment
         name = self.building_rendered_names[building_type]
         self.screen.blit(name, (position.x + max(self.building_size - name.get_width(), 0) // 2, position.y + self.padding))
         self.screen.blit(self.building_icons[building_type], (position.x + (self.building_size - 50) // 2, position.y + 20))
         
+        # Affichage des coûts de construction
         i = 0
         for ressource_type, ressource_number in self.building_costs[building_type].items():
             ressource_quantity = self.font.render(str(ressource_number), True, (255, 255, 255) if self.player.get_ressource(ressource_type) >= ressource_number else (255, 50, 50))
@@ -78,17 +140,33 @@ class BuildingChoice:
             i += 1
 
     def render(self):
+        """
+        Affiche l'interface des bâtiments.
+        """
+        # Affichage de l'image de fond
         self.screen.blit(self.background, (self.rect.x1, self.rect.y1))
+
+        # Affichage des boutons des bâtiments
         i = 0
         for building_type in self.building_costs.keys():
             self.display_building(building_type, Point(self.margin + i % 2 * (self.building_size + self.margin * 2), self.margin + (self.building_size + self.margin * 2 - 1) * (i // 2)) + self.internal_origin) 
             i += 1
 
     def event_stream(self, event):
+        """
+        Gère les événements de l'interface des bâtiments (donnés depuis GameVue).
+
+        Paramètres:
+        -----------
+        event : pygame.event.Event
+            L'événement à gérer.
+        """
         result = None
+        # Vérification des boutons
         for building_type, button in self.buttons.items():
             clicked = button.is_clicked(event)
             if clicked:
+                # Vérification des ressources si le bouton est cliqué
                 enough_ressources = True
                 for ressource_type, ressource_number in self.building_costs[building_type].items():
                     if self.player.get_ressource(ressource_type) < ressource_number:

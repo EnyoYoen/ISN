@@ -1,6 +1,9 @@
 from enum import Enum
 
 class Technologies(Enum):
+    """
+    Enumération des technologies
+    """
     FORESTRY = 1
     AGRICULTURE = 2
     MINING = 3
@@ -11,6 +14,28 @@ class Technologies(Enum):
     EXTRA_MATERIALS = 8
 
 class Upgrades:
+    """
+    Classe des améliorations
+
+    Attributs:
+    BUILDING_HEALTH_MULTIPLIER (int):
+        Le multiplicateur de santé des bâtiments.
+    BUILDING_TIME_MULTIPLIER (int):
+        Le multiplicateur de temps de construction des bâtiments.
+    FOOD_MULTIPLIER (int):
+        Le multiplicateur de production de nourriture.
+    MINING_MULTIPLIER (int):
+        Le multiplicateur de production de minerais.
+    WOOD_MULTIPLIER (int):
+        Le multiplicateur de production de bois.
+    HUNT_MULTIPLIER (int):
+        Le multiplicateur de production de viande.
+    COMBAT_MULTIPLIER (int):
+        Le multiplicateur de combat.
+    EXTRA_MATERIALS (bool):
+        Si le joueur peut obtenir des matériaux supplémentaires (vulcain et crystal).
+    """
+
     __slots__ = ["BUILDING_HEALTH_MULTIPLIER", "BUILDING_TIME_MULTIPLIER", "FOOD_MULTIPLIER", "MINING_MULTIPLIER", "WOOD_MULTIPLIER", "HUNT_MULTIPLIER", "COMBAT_MULTIPLIER", "EXTRA_MATERIALS"]
 
     def __init__(self) -> None:

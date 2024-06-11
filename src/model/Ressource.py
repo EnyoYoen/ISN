@@ -1,6 +1,9 @@
 from enum import Enum
 
 class RessourceType(Enum):
+    """
+    Enumération des types de ressources
+    """
     FOOD = 1
     WOOD = 2
     STONE = 3

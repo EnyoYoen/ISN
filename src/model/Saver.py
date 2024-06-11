@@ -13,24 +13,44 @@ from model.Upgrades import Upgrades
 from model.Tools import Directions
 
 class Saver:
+    """
+    Classe permettant de sauvegarder et de charger une partie.
+
+    Attributs:
+    ----------
+    game_vue : GameVue
+        L'objet du jeu.
+    save_name : str
+        Le nom de la sauvegarde.
+    """
+
     __slots__ = ["game_vue", "save_name"]
 
     def __init__(self, game_vue, save_name = None) -> None:
+        # On initialise les attributs de la sauvegarde
         self.game_vue = game_vue
+        # On initialise le nom de la sauvegarde si il n'est pas donné
         if save_name is None:
             self.save_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         else:
             self.save_name = save_name
 
     def save(self):
+        """
+        Sauvegarde de la partie.
+        """
+
+        # On crée le dossier de sauvegarde si il n'existe pas
         saves_directory = "saves"
         if not os.path.exists(saves_directory):
             os.makedirs(saves_directory)
 
+        # On crée le dossier de sauvegarde de la partie
         save_dir = os.path.join(saves_directory, self.save_name)
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
 
+        # On sauvegarde les données dans un fichier binaire
         map = self.game_vue.map
         signature = [77, 65, 80, 00] # 'MAP_' in ASCII
         with open(f"saves/{self.save_name}/map.exd", "wb") as f:
@@ -131,6 +151,16 @@ class Saver:
             f.write(struct.pack('ff', self.game_vue.camera_pos.x, self.game_vue.camera_pos.y))
 
     def save_sructure(self, f, structure):
+        """
+        Sauvegarde une structure dans un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        structure : Structure
+            La structure à sauvegarder.
+        """
         f.write(struct.pack('i', structure.sid))
         f.write(struct.pack('B', structure.structure_type.value))
         f.write(struct.pack('ii', int(structure.coords.x), int(structure.coords.y)))
@@ -140,10 +170,30 @@ class Saver:
             f.write(struct.pack('ii', point.x, point.y))
 
     def save_typed_structure(self, f, structure):
+        """
+        Sauvegarde une structure typée dans un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        structure : Structure
+            La structure à sauvegarder.
+        """
         self.save_sructure(f, structure)
         f.write(struct.pack('B', structure.type.value))
 
     def save_building(self, f, building):
+        """
+        Sauvegarde un bâtiment dans un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        building : Building
+            Le bâtiment à sauvegarder.
+        """
         self.save_typed_structure(f, building)
         f.write(struct.pack('i', building.player.pid))
         f.write(struct.pack('f', building.health))
@@ -156,13 +206,43 @@ class Saver:
         f.write(struct.pack('B', building.gamevue is not None))
 
     def save_tree(self, f, tree):
+        """
+        Sauvegarde un arbre dans un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        tree : Tree
+            L'arbre à sauvegarder.
+        """
         self.save_sructure(f, tree)
         f.write(struct.pack('f', tree.health))
 
     def save_ore(self, f, ore):
+        """
+        Sauvegarde une veine de minerai dans un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        ore : Ore
+            La veine de minerai à sauvegarder.
+        """
         self.save_typed_structure(f, ore)
 
     def save_human(self, f, human):
+        """
+        Sauvegarde un humain dans un fichier binaire.
+        
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        human : Human
+            L'humain à sauvegarder.
+        """
         f.write(struct.pack('B', human.type.value))
         f.write(struct.pack('ff', human.current_location.x, human.current_location.y))
         f.write(struct.pack('i', human.player.pid))
@@ -214,6 +294,16 @@ class Saver:
             f.write(struct.pack('f', quantity))
 
     def save_player(self, f, player):
+        """
+        Sauvegarde un joueur dans un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        player : Player
+            Le joueur à sauvegarder.
+        """
         f.write(struct.pack('i', player.pid))
         f.write(struct.pack('i', len(player.ressources)))
         for ressource_type, quantity in player.ressources.items():
@@ -222,6 +312,16 @@ class Saver:
         self.save_upgrades(f, player.upgrades)
 
     def save_upgrades(self, f, upgrades):
+        """
+        Sauvegarde les améliorations d'un joueur dans un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        upgrades : Upgrades
+            Les améliorations du joueur à sauvegarder.
+        """
         f.write(struct.pack('B', upgrades.EXTRA_MATERIALS))
         f.write(struct.pack('B', upgrades.FOOD_MULTIPLIER))
         f.write(struct.pack('B', upgrades.MINING_MULTIPLIER))
@@ -234,8 +334,12 @@ class Saver:
 
 
     def load(self):
+        """
+        Charge une partie.
+        """
         signature = [77, 65, 80, 00] # 'MAP_' in ASCII
         with open(f"saves/{self.save_name}/map.exd", "rb") as f:
+            # On vérifie la signature
             file_signature = list(struct.unpack('BBBB', f.read(4)))
             if file_signature != signature:
                 raise ValueError("Invalid file format")
@@ -350,6 +454,14 @@ class Saver:
             self.game_vue.camera_pos = Point(struct.unpack('f', f.read(4))[0], struct.unpack('f', f.read(4))[0])
 
     def load_structure(self, f):
+        """
+        Charge une structure depuis un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        """
         sid = struct.unpack('i', f.read(4))[0]
         structure_type = StructureType(struct.unpack('B', f.read(1))[0])
         coords = Point(struct.unpack('i', f.read(4))[0], struct.unpack('i', f.read(4))[0])
@@ -361,11 +473,29 @@ class Saver:
         return [sid, structure_type, coords, orientation, points]
 
     def load_typed_structure(self, f):
+        """
+        Charge une structure typée depuis un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        """
         ts = self.load_structure(f)
         ts.append(struct.unpack('B', f.read(1))[0])
         return ts
 
     def load_building(self, f, players):
+        """
+        Charge un bâtiment depuis un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        players : dict
+            Les joueurs de la partie.
+        """
         b = self.load_typed_structure(f)
         player = players[struct.unpack('i', f.read(4))[0]]
         type = BuildingType(b[5])
@@ -384,6 +514,14 @@ class Saver:
         return building
 
     def load_tree(self, f):
+        """
+        Charge un arbre depuis un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        """
         t = self.load_structure(f)
         tree = Tree(t[2], self.game_vue.map.tree_chopped_callback, Orientation(t[3]))
         tree.sid = t[0]
@@ -391,12 +529,30 @@ class Saver:
         return tree
     
     def load_ore(self, f):
+        """
+        Charge une veine de minerai depuis un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        """
         o = self.load_typed_structure(f)
         ore = Ore(OreType(o[5]), o[2], self.game_vue.map.ore_mined_callback, Orientation(o[3]))
         ore.sid = o[0]
         return ore
     
     def load_human(self, f, players):
+        """
+        Charge un humain depuis un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        players : dict
+            Les joueurs de la partie.
+        """
         type = HumanType(struct.unpack('B', f.read(1))[0])
         location = Point(struct.unpack('f', f.read(4))[0], struct.unpack('f', f.read(4))[0])
         player = players[struct.unpack('i', f.read(4))[0]]
@@ -458,6 +614,16 @@ class Saver:
         return h
 
     def load_upgrades(self, f, upgrades):
+        """
+        Charge les améliorations d'un joueur depuis un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        upgrades : Upgrades
+            Les améliorations du joueur à charger.
+        """
         upgrades.EXTRA_MATERIALS = struct.unpack('B', f.read(1))[0]
         upgrades.FOOD_MULTIPLIER = struct.unpack('B', f.read(1))[0]
         upgrades.MINING_MULTIPLIER = struct.unpack('B', f.read(1))[0]
@@ -468,6 +634,16 @@ class Saver:
         upgrades.BUILDING_TIME_MULTIPLIER = struct.unpack('B', f.read(1))[0]
 
     def load_player(self, f, player):
+        """
+        Charge un joueur depuis un fichier binaire.
+
+        Parametres:
+        -----------
+        f : file
+            Le fichier binaire.
+        player : Player
+            Le joueur à charger.
+        """
         player.pid = struct.unpack('i', f.read(4))[0]
         for _ in range(struct.unpack('i', f.read(4))[0]):
             ressource_type = struct.unpack('B', f.read(1))[0]
