@@ -528,23 +528,6 @@ class GameVue(Scene):
             # On ouvre le menu pause
             pause = Pause(self.core, self.render, self.saver) 
             pause.run()
-        if event.key == pygame.K_h: # TODO: For debug, remove for the final version
-            chunk_pos = self.camera_pos // Map.CELL_SIZE // Perlin.CHUNK_SIZE
-            if self.map.chunk_humans.get(chunk_pos, None) is None:
-                self.map.chunk_humans[chunk_pos] = []
-            human = Colon(self.map, self.camera_pos, self.player, self.human_died_callback)
-            self.map.chunk_humans[chunk_pos].append(human)
-            self.map.humans.append(human)
-            self.frame_render = True
-        if event.key == pygame.K_r: # TODO: For debug, remove for the final version
-            self.player.add_ressource(RessourceType.WOOD, 1000)
-            self.player.add_ressource(RessourceType.FOOD, 1000)
-            self.player.add_ressource(RessourceType.STONE, 1000)
-            self.player.add_ressource(RessourceType.IRON, 1000)
-            self.player.add_ressource(RessourceType.COPPER, 1000)
-            self.player.add_ressource(RessourceType.GOLD, 1000)
-            self.player.add_ressource(RessourceType.CRYSTAL, 1000)
-            self.player.add_ressource(RessourceType.VULCAN, 1000)
         if event.key == pygame.K_ESCAPE:
             # On déselectionne les humains et le bâtiment en cours de placement
             self.reset_building()
